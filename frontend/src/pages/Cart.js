@@ -164,7 +164,7 @@ const moveBackToCart = async (id) => {
     localStorage.setItem('cart', JSON.stringify(fallbackCart));
   }
 
-  // ✅ Always update state and localStorage together
+  // Always update state and localStorage together
   setSavedItems(updatedSaved);
   localStorage.setItem('savedItems', JSON.stringify(updatedSaved));
   window.dispatchEvent(new Event('cart-updated'));

@@ -47,6 +47,6 @@ const yamlStr = yaml.dump(swaggerSpec, { lineWidth: -1 });
 // Write the YAML string to a file
 fs.writeFileSync(path.join(__dirname, './swagger.yaml'), yamlStr, 'utf8');
 
-console.log('✅ Swagger YAML successfully generated at ./swagger.yaml');
+console.log('Swagger YAML successfully generated at ./swagger.yaml');
 
 module.exports = swaggerSpec;

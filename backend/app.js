@@ -12,7 +12,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 
 const app = express();
-app.set('trust proxy', 1); // Trust first proxy for X-Forwarded-For
+app.set('trust proxy', 1);
 
 // CORS setup
 app.use(cors({
@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === 'production') {
   console.log('Rate limiting disabled in development');
 }
 
-// Security + logging
+// Security & logging
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(bodyParser.json());

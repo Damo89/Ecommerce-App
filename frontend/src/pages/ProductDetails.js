@@ -34,7 +34,7 @@ const handleAddToCart = async () => {
 
       if (!response.ok) throw new Error('Backend cart update failed');
 
-      // ✅ Fetch the updated cart and update localStorage
+      // Fetch the updated cart and update localStorage
       const cartRes = await fetch('/api/carts/me', {
         credentials: 'include',
       });
@@ -45,7 +45,7 @@ const handleAddToCart = async () => {
         window.dispatchEvent(new Event('cart-updated'));
       }
     } else {
-      // 🛒 Guest user — localStorage only
+      // Guest user — localStorage only
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
       const existing = cart.find(item => item.id === product.id);
 

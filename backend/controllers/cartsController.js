@@ -19,7 +19,7 @@ const getCartByUserId = async (req, res) => {
   }
 };
 
-// ✅ Secure: Fetch cart for logged-in user (req.user.id)
+// Secure: Fetch cart for logged-in user (req.user.id)
 const getCartForCurrentUser = async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: 'Unauthorized' });
@@ -47,7 +47,7 @@ const getCartForCurrentUser = async (req, res) => {
   }
 };
 
-// ✅ Keep the rest of your functions (add, update, delete)
+// Keep the rest of your functions (add, update, delete)
 const addToCart = async (req, res) => {
   const { product_id, quantity } = req.body;
   const user_id = req.user?.id;
@@ -138,10 +138,10 @@ const saveCartForCurrentUser = async (req, res) => {
   try {
     await pool.query('BEGIN');
 
-    // ✅ Always clear the cart first
+    // Always clear the cart first
     await pool.query(`DELETE FROM carts WHERE user_id = $1`, [userId]);
 
-    // ✅ If there's anything to re-add, do it
+    // If there's anything to re-add, do it
     if (validItems.length > 0) {
       for (const item of validItems) {
         const product_id = item.product_id || item.id;

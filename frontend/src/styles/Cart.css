@@ -155,7 +155,7 @@
   gap: 0.5rem;
 }
 
-/* ✅ Responsive styles for mobile screens */
+/* Responsive styles for mobile screens */
 @media (max-width: 600px) {
   .cart-item {
     flex-direction: column;

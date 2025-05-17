@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import '../styles/Login.css'; // reuse styling from login if available
+import '../styles/Login.css';
 
 export default function AlreadyLoggedIn() {
   const navigate = useNavigate();

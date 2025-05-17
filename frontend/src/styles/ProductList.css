@@ -22,8 +22,8 @@
 
 /* CARD */
 .product-card {
-  flex: 1 1 300px;            /* Base width of 300px, grows and shrinks */
-  max-width: 320px;           /* Prevents stretching too far */
+  flex: 1 1 300px;
+  max-width: 320px;
   background-color: #fff;
   border-radius: 20px;
   overflow: hidden;

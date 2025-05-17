@@ -38,7 +38,7 @@ const registerUser = async (req, res) => {
   }
 };
 
-// ✅ Login user and start session with req.login
+// Login user and start session with req.login
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -60,7 +60,7 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    // ✅ This saves the user into the session
+    // This saves the user into the session
     req.login(user, (err) => {
       if (err) {
         console.error('Login error:', err);

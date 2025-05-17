@@ -15,7 +15,7 @@ export default function Checkout() {
 
     syncCart();
 
-    // 👇 Update cart on 'cart-updated' event
+    // Update cart on 'cart-updated' event
     window.addEventListener('cart-updated', syncCart);
     window.addEventListener('cart-cleared', () => {
       setCart([]);
