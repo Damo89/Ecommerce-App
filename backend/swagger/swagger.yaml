@@ -1,0 +1,442 @@
+openapi: 3.0.0
+info:
+  title: E-commerce API
+  version: 1.0.0
+  description: API documentation for the E-commerce platform
+servers:
+  - url: http://localhost:5000
+    description: Development server
+
+paths:
+  /api/register:
+    post:
+      summary: Register a new user
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: User created
+
+  /api/login:
+    post:
+      summary: Login user
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+        '401':
+          description: Invalid credentials
+
+  /api/profile:
+    get:
+      summary: Get authenticated user profile
+      tags: [Auth]
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: User profile returned
+        '401':
+          description: Unauthorized
+
+  /api/logout:
+    post:
+      summary: Logout current user
+      tags: [Auth]
+      responses:
+        '200':
+          description: Logged out successfully
+
+  /api/google:
+    get:
+      summary: Start Google OAuth login
+      tags: [Auth]
+      responses:
+        '302':
+          description: Redirect to Google login
+
+  /api/google/callback:
+    get:
+      summary: Google OAuth callback
+      tags: [Auth]
+      responses:
+        '302':
+          description: Redirect after Google login
+
+  /api/github:
+    get:
+      summary: Start GitHub OAuth login
+      tags: [Auth]
+      responses:
+        '302':
+          description: Redirect to GitHub login
+
+  /api/github/callback:
+    get:
+      summary: GitHub OAuth callback
+      tags: [Auth]
+      responses:
+        '302':
+          description: Redirect after GitHub login
+
+  /api/carts/me:
+    get:
+      summary: Get cart items for current user
+      tags: [Cart]
+      responses:
+        '200':
+          description: List of cart items
+    delete:
+      summary: Clear the cart for current logged-in user
+      tags: [Cart]
+      responses:
+        '200':
+          description: Cart cleared successfully
+
+  /api/carts/me/save:
+    post:
+      summary: Save cart for the current user
+      tags: [Cart]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cart:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      quantity:
+                        type: integer
+      responses:
+        '200':
+          description: Cart saved
+
+  /api/carts:
+    post:
+      summary: Add a product to the cart
+      tags: [Cart]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required: [product_id, quantity]
+              properties:
+                product_id:
+                  type: integer
+                quantity:
+                  type: integer
+      responses:
+        '201':
+          description: Product added to cart
+
+  /api/carts/{userId}:
+    get:
+      summary: Get all cart items for a user
+      tags: [Cart]
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Cart items
+
+  /api/carts/{cartId}:
+    put:
+      summary: Update quantity of a cart item
+      tags: [Cart]
+      parameters:
+        - in: path
+          name: cartId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required: [quantity]
+              properties:
+                quantity:
+                  type: integer
+      responses:
+        '200':
+          description: Cart item updated
+    delete:
+      summary: Delete a cart item
+      tags: [Cart]
+      parameters:
+        - in: path
+          name: cartId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Item deleted
+
+  /api/carts/remove/{cartId}:
+    delete:
+      summary: Remove cart item securely for logged-in user
+      tags: [Cart]
+      parameters:
+        - in: path
+          name: cartId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Item removed securely
+
+  /api/carts/merge:
+    post:
+      summary: Merge local cart with current user’s cart
+      tags: [Cart]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  product_id:
+                    type: integer
+                  quantity:
+                    type: integer
+      responses:
+        '200':
+          description: Cart merged
+
+  /api/carts/{userId}/checkout:
+    post:
+      summary: Checkout cart and create order
+      tags: [Checkout]
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                paymentDetails:
+                  type: object
+                  properties:
+                    cardNumber:
+                      type: string
+      responses:
+        '201':
+          description: Checkout successful
+
+  /api/orders:
+    get:
+      summary: Get all orders
+      tags: [Orders]
+      responses:
+        '200':
+          description: List of orders
+    post:
+      summary: Create a new order
+      tags: [Orders]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required: [user_id, total]
+              properties:
+                user_id:
+                  type: integer
+                total:
+                  type: number
+                status:
+                  type: string
+      responses:
+        '201':
+          description: Order created
+
+  /api/orders/me:
+    get:
+      summary: Get order history for logged-in user
+      tags: [Orders]
+      responses:
+        '200':
+          description: User’s past orders
+
+  /api/orders/{id}:
+    get:
+      summary: Get order by ID
+      tags: [Orders]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Order found
+    put:
+      summary: Update an order
+      tags: [Orders]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                user_id:
+                  type: integer
+                total:
+                  type: number
+                status:
+                  type: string
+      responses:
+        '200':
+          description: Order updated
+    delete:
+      summary: Delete an order
+      tags: [Orders]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Order deleted
+
+  /api/orders/user/{user_id}:
+    get:
+      summary: Get all orders by user
+      tags: [Orders]
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Orders by user
+
+  /api/orders/user/{user_id}/{order_id}:
+    get:
+      summary: Get specific order details for a user
+      tags: [Orders]
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Order details returned
+
+  /api/payment/create-checkout-session:
+    post:
+      summary: Create a Stripe checkout session
+      tags: [Payments]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      price:
+                        type: number
+                      quantity:
+                        type: integer
+      responses:
+        '200':
+          description: Stripe session created
+
+  /api/orders/success:
+    post:
+      summary: Record a successful Stripe order
+      tags: [Orders]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [user_id, items, total]
+              properties:
+                user_id:
+                  type: integer
+                total:
+                  type: number
+                items:
+                  type: array
+                  items:
+                    type: object
+                    required: [product_id, quantity]
+                    properties:
+                      product_id:
+                        type: integer
+                      quantity:
+                        type: integer
+      responses:
+        '201':
+          description: Order recorded
+
+components: {}
+tags: []
