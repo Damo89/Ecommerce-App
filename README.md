@@ -1,6 +1,8 @@
 
 # 🛍️ Ecommerce-App
 
+**Note:** This is a fake eCommerce application built solely for learning and practice purposes. It is not intended for real-world use or handling real transactions.
+
 An end-to-end eCommerce web application featuring a secure REST API backend with authentication, Stripe-based payments, and a modern React frontend.
 
 ---
