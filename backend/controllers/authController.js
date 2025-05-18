@@ -5,7 +5,7 @@ const { verifyPassword } = require('../middleware/hash');
 // Register user
 const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
-  console.log('📦 Incoming registration payload:', req.body);
+  console.log('Incoming registration payload:', req.body);
 
   if (!name || !email || !password) {
     return res.status(400).json({ error: 'Name, email and password are required' });
