@@ -13,6 +13,9 @@ const cors = require('cors');
 
 const app = express();
 app.set('trust proxy', 1);
+app.get("/", (req, res) => {
+  res.send("API is running");
+});
 
 // CORS setup
 app.use(cors({
