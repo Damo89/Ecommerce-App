@@ -34,7 +34,17 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Security & logging
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      imgSrc: ["'self'", "data:"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      fontSrc: ["'self'"]
+    }
+  }
+}));
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(express.json());
