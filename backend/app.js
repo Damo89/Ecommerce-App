@@ -5,7 +5,7 @@ const passport = require('passport');
 const initializePassport = require('./config/passport-config');
 const bodyParser = require('body-parser');
 const swaggerUi = require('swagger-ui-express');
-const swaggerSpec = require('./swagger/swagger');
+const path = require('path'); // added for serving YAML
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
@@ -13,9 +13,6 @@ const cors = require('cors');
 
 const app = express();
 app.set('trust proxy', 1);
-app.get("/", (req, res) => {
-  res.send("API is running");
-});
 
 // CORS setup
 app.use(cors({
@@ -37,17 +34,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Security & logging
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      imgSrc: ["'self'", "data:"],
-      scriptSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      fontSrc: ["'self'"]
-    }
-  }
-}));
+app.use(helmet());
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(express.json());
@@ -72,8 +59,15 @@ initializePassport(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// Serve swagger.yaml statically
+app.use('/swagger.yaml', express.static(path.join(__dirname, 'swagger/swagger.yaml')));
+
+// Swagger UI using static YAML file
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(null, {
+  swaggerOptions: {
+    url: '/swagger.yaml'
+  }
+}));
 
 // Routes
 const testRoutes = require('./routes/test');

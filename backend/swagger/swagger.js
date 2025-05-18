@@ -41,12 +41,14 @@ const options = {
 // Generate the Swagger specification from JSDoc comments
 const swaggerSpec = swaggerJSDoc(options);
 
-// Convert JSON to YAML format
-const yamlStr = yaml.dump(swaggerSpec, { lineWidth: -1 });
+if (require.main === module) {
+  // Convert JSON to YAML format
+  const yamlStr = yaml.dump(swaggerSpec, { lineWidth: -1 });
 
-// Write the YAML string to a file
-fs.writeFileSync(path.join(__dirname, './swagger.yaml'), yamlStr, 'utf8');
+  // Write the YAML string to a file
+  fs.writeFileSync(path.join(__dirname, './swagger.yaml'), yamlStr, 'utf8');
 
-console.log('Swagger YAML successfully generated at ./swagger.yaml');
+  console.log('Swagger YAML successfully generated at ./swagger.yaml');
+}
 
 module.exports = swaggerSpec;
